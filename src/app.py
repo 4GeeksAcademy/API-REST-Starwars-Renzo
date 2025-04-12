@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User
+from models import db, Usuario, Planetas, Personajes
 #from models import Person
 
 app = Flask(__name__)
@@ -36,14 +36,61 @@ def handle_invalid_usage(error):
 def sitemap():
     return generate_sitemap(app)
 
-@app.route('/user', methods=['GET'])
-def handle_hello():
 
-    response_body = {
-        "msg": "Hello, this is your GET /user response "
-    }
+@app.route('/people', methods=['GET'])
+def get_people():
+    people = Personajes.query.all()
+    people = list(map(lambda x: x.serialize(), people))
+    if not people:
+        raise APIException("User not found", status_code=404)
 
-    return jsonify(response_body), 200
+    return jsonify(people), 200
+
+@app.route('/people/<int:id>', methods=['GET'])
+def get_people_id(id):
+    people = Personajes.query.get(id)
+    if not people:
+        return jsonify({"error": "User not found"}), 404
+    return jsonify(people.serialize()), 200
+
+
+@app.route('/usuario', methods=['GET'])
+def get_usuario():
+    usuario = Usuario.query.all()
+    usuario = list(map(lambda x: x.serialize(), usuario))
+    if not usuario:
+        raise APIException("User not found", status_code=404)
+
+    return jsonify(usuario), 200
+
+@app.route('/usuario/<int:id>', methods=['GET'])
+def get_usuario_id(id):
+    usuario = Usuario.query.get(id)
+    if not usuario:
+        return jsonify({"error": "User not found"}), 404
+    return jsonify(usuario.serialize()), 200
+
+
+@app.route('/planets', methods=['GET'])
+def get_planetas():
+    planets = Planetas.query.all()
+    planets = list(map(lambda x: x.serialize(), planets))
+    if not planets:
+        raise APIException("User not found", status_code=404)
+
+    return jsonify(planets), 200
+
+@app.route('/planets/<int:id>', methods=['GET'])
+def get_planetas_id(id):
+    planets = Planetas.query.get(id)
+    if not planets:
+        return jsonify({"error": "User not found"}), 404
+    return jsonify(planets.serialize()), 200
+
+
+
+
+
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
