@@ -53,24 +53,6 @@ def get_people_id(id):
         return jsonify({"error": "User not found"}), 404
     return jsonify(people.serialize()), 200
 
-
-@app.route('/usuario', methods=['GET'])
-def get_usuario():
-    usuario = Usuario.query.all()
-    usuario = list(map(lambda x: x.serialize(), usuario))
-    if not usuario:
-        raise APIException("User not found", status_code=404)
-
-    return jsonify(usuario), 200
-
-@app.route('/usuario/<int:id>', methods=['GET'])
-def get_usuario_id(id):
-    usuario = Usuario.query.get(id)
-    if not usuario:
-        return jsonify({"error": "User not found"}), 404
-    return jsonify(usuario.serialize()), 200
-
-
 @app.route('/planets', methods=['GET'])
 def get_planetas():
     planets = Planetas.query.all()
@@ -87,7 +69,21 @@ def get_planetas_id(id):
         return jsonify({"error": "User not found"}), 404
     return jsonify(planets.serialize()), 200
 
+@app.route('/usuario', methods=['GET'])
+def get_usuario():
+    usuario = Usuario.query.all()
+    usuario = list(map(lambda x: x.serialize(), usuario))
+    if not usuario:
+        raise APIException("User not found", status_code=404)
 
+    return jsonify(usuario), 200
+
+@app.route('/usuario/<int:id>', methods=['GET'])
+def get_usuario_id(id):
+    usuario = Usuario.query.get(id)
+    if not usuario:
+        return jsonify({"error": "User not found"}), 404
+    return jsonify(usuario.serialize()), 200
 
 
 
