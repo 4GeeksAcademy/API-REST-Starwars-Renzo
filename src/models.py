@@ -23,6 +23,8 @@ class Usuario(db.Model):
             "username": self.username,
             "firstName": self.firstName,
             "lastName": self.lastName
+            #"planetas_favoritos": [favorite.serialize() for favorite in self.planetas_favoritos],
+            #"personajes_favoritos": [favorite.serialize() for favorite in self.personajes_favoritos]
         }
 
 class Planetas_favoritos(db.Model):
@@ -30,7 +32,7 @@ class Planetas_favoritos(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     
     usuario_id: Mapped[str] = mapped_column(ForeignKey('usuario.id'))
-    usuario: Mapped["Usuario"] = relationship()
+    usuario: Mapped["Usuario"] = relationship("Usuario", backref="planetas_favoritos")
 
     planetas_id: Mapped[int] = mapped_column(ForeignKey('planetas.id'))
     planetas: Mapped["Planetas"] = relationship()
@@ -52,7 +54,7 @@ class Personajes_favoritos(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
 
     usuario_id: Mapped[str] = mapped_column(ForeignKey('usuario.id'))
-    usuario: Mapped["Usuario"] = relationship()
+    usuario: Mapped["Usuario"] = relationship("Usuario", backref="personajes_favoritos")
 
     personajes_id: Mapped[int] = mapped_column(ForeignKey('personajes.id'))
     personajes: Mapped["Personajes"] = relationship()
